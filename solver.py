@@ -137,7 +137,8 @@ class Solver:
         try:
             solution = [str(x) for x in utils.solve(normalized_kociemba, 'Kociemba')]
 
-        except:
+        except Exception as inst:
+            print(inst)
             print("Error finding a solution, please retry")
 
         if solution:

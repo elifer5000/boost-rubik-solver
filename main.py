@@ -7,7 +7,7 @@ boost = Boost()
 webcam = Webcam()
 solver = Solver(boost, webcam)
 
-print("Avaliable commands:")
+print("Available commands:")
 print("s   - solve the cube")
 print("r   - rotate bed clockwise")
 print("l   - rotate bed counter-clockwise")
@@ -32,13 +32,13 @@ def runloop():
             boost.grip_up()
             boost.rotate(-1, overshoot=True)
         elif cmd == "gu":
-            res = boost.grip_up()
+            boost.grip_up()
         elif cmd == "gd":
-            res = boost.grip_down()
+            boost.grip_down()
         elif cmd == "t":
-            res = boost.tilt()
+            boost.tilt()
         elif cmd == "s":
-            res = solver.solve()
+            solver.solve()
         elif cmd == "q":
             boost.off()
             webcam.stop_video()

@@ -26,32 +26,28 @@ class Boost():
                 overshoot_value = LTURN_OVERSHOOT
 
         print(direction*QUARTER_TURN + overshoot_value)
-        res = self.hub.motor_external.angled(direction*QUARTER_TURN + overshoot_value, 0.1)
+        self.hub.motor_external.angled(direction*QUARTER_TURN + overshoot_value, 0.3)
         if overshoot:
-            res &= self.hub.motor_external.angled(-overshoot_value, 1)
-        return res
+            self.hub.motor_external.angled(-overshoot_value, 2)
         
     def grip_up(self):
         if self.grip == True:
             return True
-        res = self.hub.motor_B.angled(-GRIP_TURN, 0.2)
+        self.hub.motor_B.angled(-GRIP_TURN, 0.2)
         self.grip = True
-        return res
         
     def grip_down(self):
         if self.grip == False:
             return
-        res = self.hub.motor_B.angled(GRIP_TURN, 0.2)
+        self.hub.motor_B.angled(GRIP_TURN, 0.2)
         self.grip = False
-        return res
         
     
     def tilt(self):
         self.grip_down()
-        res = self.hub.motor_A.angled(-ROD_TURN, 0.2)
-        res &= self.hub.motor_A.angled(ROD_TURN, 0.5)
+        self.hub.motor_A.angled(-ROD_TURN, 0.5)
+        self.hub.motor_A.angled(ROD_TURN, 0.8)
         self.grip_up()
-        return res
 
     def off(self):
         self.hub.switch_off()

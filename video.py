@@ -8,6 +8,7 @@ from color import name_to_bgr, detect_bgr, rect_average
 import json
 import threading
 import color
+import numpy as np
 
 REGION_SIZE = 32
 REGION_PAD = 192
@@ -66,17 +67,70 @@ class Webcam:
         self.cam = cv2.VideoCapture(0)
         cv2.namedWindow("win1");
         cv2.moveWindow("win1", 20, 20);
+        self.cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 3) # auto mode
+        # self.cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1) # manual mode
+        # self.cam.set(cv2.CAP_PROP_EXPOSURE, 10)
+        self.cam.set(cv2.CAP_PROP_AUTO_WB, 0)
+
         while self.running:
             ret, frame = self.cam.read()
-            key = cv2.waitKey(10) & 0xff
+   
+            key = cv2.waitKeyEx(10)
+            # print(key)
+            if key == 27:
+                break
+            elif key == 63232:
+                # print("Up arrow key was pressed")
+                self.offset_y -= 5
+                print("offset_y " + str(self.offset_y))
+            elif key == 63233:
+                # print("Down arrow key was pressed")
+                self.offset_y += 5
+                print("offset_y " + str(self.offset_y))
+            elif key == 63235:
+                # print("Right arrow key was pressed")
+                self.offset_x += 5
+                print("offset_x " + str(self.offset_x))
+            elif key == 63234:
+                # print("Left arrow key was pressed")
+                self.offset_x -= 5
+                print("offset_x " + str(self.offset_x))
+            elif key == 45: # -
+                self.zoom_factor /= 1.1
+                print("zoom " + str(self.zoom_factor))
+            elif key == 61: # +
+                self.zoom_factor *= 1.1
+                print("zoom " + str(self.zoom_factor))
+            
             if ret:
-                self.current_frame = frame.copy()
-                self.update_window(frame)
+                # Define the region of interest (ROI)
+                height, width, _ = frame.shape
+                halfWidth = int(width/2);
+                x_center = int(width / 2) + self.offset_x
+                y_center = int(height / 2) + self.offset_y
+
+                roi_width = int(width // (2 * self.zoom_factor)) # by 2 because it's half the screen
+                roi_height = int(height // (self.zoom_factor))
+
+                # Get the interest area in the middle of the screen
+                roi = cv2.getRectSubPix(frame, (roi_width, roi_height), (x_center, y_center))
+                resized_roi = cv2.resize(roi, (halfWidth, height))
+                
+                # Fill array with zeros (same size as camera output), and put the image on the left
+                self.current_frame = np.zeros((height, width, 3), dtype=np.uint8)
+                self.current_frame[0:height, 0:halfWidth] = resized_roi
+                self.update_window(self.current_frame)
 
         self.cam.release()
         cv2.destroyAllWindows()
 
     def start_video(self):
+        # Offset and zoom set according to my camera
+        # You can start from 0, 0, 1 and find the values that suit you
+        self.offset_x = -75
+        self.offset_y = 400
+        self.zoom_factor = 2.5937424601000023
+
         self.running = True
         self.regions = []
         for y in range(3):

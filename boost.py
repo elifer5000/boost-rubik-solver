@@ -14,7 +14,7 @@ ROD_TURN = 80
 class Boost():
     def __init__(self):
         self.grip = None
-        self.hub = MoveHub(get_connection_bleak(hub_mac = "D8EED5BD-D9DA-43C5-97E1-4273F0368182"))
+        self.hub = MoveHub(get_connection_bleak(hub_mac = "29D856D4-DE36-C0DC-D386-DADD8B1EA8AF"))
         
         
     def rotate(self, direction: int, overshoot: bool = False):

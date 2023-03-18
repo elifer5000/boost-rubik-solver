@@ -5,11 +5,12 @@ import logging
 
 QUARTER_TURN = 90
 
-RTURN_OVERSHOOT = 25
+RTURN_OVERSHOOT = 23
 LTURN_OVERSHOOT = -25
 
 GRIP_TURN = 90
-ROD_TURN = 80
+ROD_TURN = 95
+
 
 class Boost():
     def __init__(self):
@@ -26,9 +27,9 @@ class Boost():
                 overshoot_value = LTURN_OVERSHOOT
 
         print(direction*QUARTER_TURN + overshoot_value)
-        self.hub.motor_external.angled(direction*QUARTER_TURN + overshoot_value, 0.3)
+        self.hub.motor_external.angled(direction*QUARTER_TURN + overshoot_value, 0.2)
         if overshoot:
-            self.hub.motor_external.angled(-overshoot_value, 2)
+            self.hub.motor_external.angled(-overshoot_value, 1)
         
     def grip_up(self):
         if self.grip == True:
@@ -45,8 +46,8 @@ class Boost():
     
     def tilt(self):
         self.grip_down()
-        self.hub.motor_A.angled(-ROD_TURN, 0.5)
-        self.hub.motor_A.angled(ROD_TURN, 0.8)
+        self.hub.motor_A.angled(-ROD_TURN, 0.6)
+        self.hub.motor_A.angled(ROD_TURN, 0.6)
         self.grip_up()
 
     def off(self):

@@ -11,6 +11,8 @@ print("Available commands:")
 print("s   - solve the cube")
 print("r   - rotate bed clockwise")
 print("l   - rotate bed counter-clockwise")
+print("tr   - rotate bed clockwise, gripped")
+print("tl   - rotate bed counter-clockwise, gripped")
 print("t   - tilt")
 print("gu  - grip up")
 print("gd  - grip down")
@@ -28,7 +30,7 @@ def runloop():
         elif cmd == "tr":
             boost.grip_up()
             boost.rotate(1, overshoot=True)
-        elif cmd == "tl":
+        elif cmd == "tl":   
             boost.grip_up()
             boost.rotate(-1, overshoot=True)
         elif cmd == "gu":

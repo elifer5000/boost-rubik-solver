@@ -118,6 +118,9 @@ class Solver:
                 self.boost.grip_up()
                 self.boost.rotate(2, True)
 
+            # input()
+            time.sleep(0.8)
+
 
     def patch_kociemba(self, state):
         state = state.upper()
